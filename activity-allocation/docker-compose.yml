@@ -1,0 +1,20 @@
+services:
+  dynamodb:
+    container_name: dynamodb-local
+    image: amazon/dynamodb-local:latest
+    networks:
+      - backend
+    ports:
+      - '8000:8000'
+    volumes:
+      - dynamodata:/home/dynamodblocal
+    working_dir: /home/dynamodblocal
+    # -sharedDb to make all credentials/regions see the same data
+    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath .'
+
+networks:
+  backend:
+    name: sam-local
+
+volumes:
+  dynamodata: {}
