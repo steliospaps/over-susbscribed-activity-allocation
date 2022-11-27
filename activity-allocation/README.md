@@ -58,7 +58,7 @@ The API Gateway endpoint API will be displayed in the outputs when the deploymen
 Build your application by using the `sam build` command.
 
 ```bash
-my-application$ sam build
+my-application$ sam build -u
 ```
 
 The AWS SAM CLI installs dependencies that are defined in `package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -70,14 +70,9 @@ Run functions locally and invoke them with the `sam local invoke` command.
 ```bash
 sam build -u && sam local invoke --docker-network sam-local -n ./env.json  putItemFunction --event dev/events/event-post-item.json
 
-
 sam build -u && sam local invoke --docker-network sam-local -n ./env.json getAllItemsFunction --event dev/events/event-get-all-items.json
 
 sam build -u && sam local invoke --docker-network sam-local -n ./env.json getByIdFunction --event dev/events/event-get-by-id.json
-
-my-application$ sam local invoke putItemFunction --event dev/events/event-post-item.json
-
-sam local invoke --docker-network activity-allocation_sam-local --container-env-vars=./dev/docker_env_vars.json  getAllItemsFunction --event dev/events/event-get-all-items.json
 
 
 ```
@@ -85,7 +80,7 @@ sam local invoke --docker-network activity-allocation_sam-local --container-env-
 The AWS SAM CLI can also emulate your application's API. Use the `sam local start-api` command to run the API locally on port 3000.
 
 ```bash
-my-application$ sam local start-api
+my-application$ sam local start-api --docker-network sam-local -n ./env.json
 my-application$ curl http://localhost:3000/
 ```
 
