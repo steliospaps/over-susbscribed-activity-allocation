@@ -2,8 +2,7 @@ import { navigate, Redirect } from "@reach/router";
 import React, { useEffect } from "react";
 
 export default props =>{
-
-  true || useEffect( () => {
+   useEffect( () => {
       console.log("Logout removing item")
      localStorage.removeItem('token')
      props.action()

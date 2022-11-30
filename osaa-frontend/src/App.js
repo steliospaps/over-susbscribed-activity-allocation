@@ -38,7 +38,7 @@ function App() {
     <div>
       <Header />
       <p>auth: {auth?"true":"false"}</p>
-      {false ? (
+      {auth ? (
         <div>
           <nav>
             <Link to="/">Home</Link> 
@@ -46,14 +46,14 @@ function App() {
             <Link to="foo">foo</Link> 
           </nav>
           <Router>
-            { //<Home path="/" />
-}
+            <Home path="/" />
+
             <Foo path="/" />
             <Foo2 path="foo" />
-            { //<Logout path="logout" action={()=>{setAuth(false)}} />
-}
-            { //<NotFound default/>
-}
+            <Logout path="logout" action={()=>{setAuth(false)}} />
+
+            <NotFound default/>
+
           </Router>
         </div>
       ) : (
