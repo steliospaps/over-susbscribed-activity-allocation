@@ -1,37 +1,21 @@
 
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import './App.css';
 
 import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Link, Router } from "@reach/router";
-import Header from "./pages/Header";
-import LoggedOut from "./pages/LoggedOut";
-import Login from './pages/Login';
-import Logout from './pages/Logout';
+import Header from "./components/Header";
+import LoggedOut from "./components/LoggedOut";
+import Login from './components/Login';
+import Logout from './components/Logout';
 import { navigate } from "@reach/router";
-
+import Home from './components/Home'
+import DummyClient from './client/DummyClient'
 
 // https://reach.tech/router
 
 
-let Home = () => (
-  <div>
-    Home
-  </div>
-)
-
-let Dashboard = () => <div>Dash</div>
-
-let NotFound = () => {
-
-  useEffect(() => console.log("not found"))
-
-  //return (<Redirect to="/ddd "/>)
-  return (<div>not found</div>)
-}
-
-let Foo = () => (<div>foo</div>)
-let Foo2 = () => (<div>foo</div>)
+export const ApiContext = createContext({api: new DummyClient}) 
 
 function App() {
   const [auth, setAuth] = useState(localStorage.getItem('token'))
@@ -42,7 +26,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
-      <main>
+      <ApiContext.Provider value={{api: new DummyClient}}>
       {auth ? (        
         <div>
           <nav>
@@ -50,9 +34,9 @@ function App() {
             <Button variant="text"><Link to="logout">logout</Link></Button>
           </nav>
           <Router>
-            <Home path="/" default/>
-
-            <Logout path="logout" action={() => { setAuth(false) }} />
+              <Home path="/" default/>
+              
+              <Logout path="logout" action={() => { setAuth(false) }} />
 
           </Router>
         </div>
@@ -64,7 +48,7 @@ function App() {
           </Router>
         </div>
       )}
-      </main>
+      </ApiContext.Provider>      
     </ThemeProvider>
     
   );
