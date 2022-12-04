@@ -1,6 +1,7 @@
 import { Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../App";
+import DownloadCSVButton from "./DownloadCSVButton";
 
 export default (props) =>{
 
@@ -29,6 +30,12 @@ export default (props) =>{
       :(
         <div>
         <Typography variant="h6">{data.name}</Typography>
+        <DownloadCSVButton 
+          headers={()=>['External Id','Url']}
+          data={()=>Object.values(data.users).map((item,index)=>[item.extId,encodeURI(window.location.origin+'/login/'+item.credential)])}
+          filename={data.name+'.csv'}>
+            Download as CSV
+          </DownloadCSVButton>
         <TableContainer component={Paper}>
           <TableHead>
             <TableRow>
@@ -41,8 +48,6 @@ export default (props) =>{
             //TODO: limit or paginate
             //TODO: export to clipboard?
             //https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-            //TODO: export to file?
-            //https://javascript.plainenglish.io/how-to-create-download-and-upload-files-in-react-apps-80893da4247a
             Object.values(data.users).map((item,index)=>(
               <TableRow key={index}>
                 <TableCell>{item.extId}</TableCell>
