@@ -1,13 +1,20 @@
-import { navigate, Redirect } from "@reach/router";
 import React, { useEffect } from "react";
-
-export default props =>{
+ /*
+  
+export default () =>{
    useEffect( () => {
-      console.log("Logout removing item")
+     console.log("Logout removing item")
      localStorage.removeItem('token')
-     props.action()
-     navigate(`/`)
+     //const foo= async () => {
+     // await navigate('/')
+    // }
+    // foo()
   })
 
+  console.log("rendering logout")
+
    return (<div>logged out</div>)
-}
+} */
+
+export default props=>{
+   return(<div>logged out {props.location.pathname} </div>)}

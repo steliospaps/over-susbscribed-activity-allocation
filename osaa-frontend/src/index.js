@@ -8,14 +8,63 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 import { createRoot } from 'react-dom/client';
+
+import Root, { loader as rootLoader,
+action as rootAction } from './routes/Root';
+import ErrorPage from './ErrorPage';
+import Contact, {favoriteAction, loader as contactLoader} from './routes/Contact';
+import EditContact, { editContactAction } from './routes/EditContact';
+import { actionDestroyContact } from './routes/DestroyContact';
+import Index from './routes/Index';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root/>,
+    errorElement: <ErrorPage/>,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        errorElement: <ErrorPage/>,
+        children: [
+          { index: true, element: <Index /> },
+          {
+            path: "contacts/:contactId",
+            element: <Contact />,
+            loader: contactLoader,
+            action: favoriteAction,
+          },
+          {
+            path: "contacts/:contactId/edit",
+            element: <EditContact />,
+            loader: contactLoader,
+            action: editContactAction,
+          },
+          {
+            path: "contacts/:contactId/destroy",
+            action: actionDestroyContact,
+            errorElement: <div>Oops! There was an error.</div>,
+          },
+        ]
+      }
+    ]
+
+  },
+  
+]);
+
 const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
   );
 
