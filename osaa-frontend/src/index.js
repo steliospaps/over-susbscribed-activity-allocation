@@ -15,44 +15,37 @@ import {
 
 import { createRoot } from 'react-dom/client';
 
-import Root, { loader as rootLoader,
-action as rootAction } from './routes/Root';
-import ErrorPage from './ErrorPage';
-import Contact, {favoriteAction, loader as contactLoader} from './routes/Contact';
-import EditContact, { editContactAction } from './routes/EditContact';
-import { actionDestroyContact } from './routes/DestroyContact';
-import Index from './routes/Index';
+
+import ErrorPage from './components/ErrorPage';
+import UserPool, { userPoolLoader } from './components/UserPool';
+import DummyClient from './client/DummyClient';
+import UserPools, { userPoolsLoader } from './components/UserPools';
+
+const api=new DummyClient;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root/>,
+    element: <App/>,
     errorElement: <ErrorPage/>,
-    loader: rootLoader,
-    action: rootAction,
     children: [
       {
         errorElement: <ErrorPage/>,
         children: [
-          { index: true, element: <Index /> },
-          {
-            path: "contacts/:contactId",
-            element: <Contact />,
-            loader: contactLoader,
-            action: favoriteAction,
-          },
-          {
-            path: "contacts/:contactId/edit",
-            element: <EditContact />,
-            loader: contactLoader,
-            action: editContactAction,
-          },
-          {
-            path: "contacts/:contactId/destroy",
-            action: actionDestroyContact,
-            errorElement: <div>Oops! There was an error.</div>,
-          },
-        ]
+          { 
+                path: "user-pool",
+                element: <UserPools/>,
+                loader: userPoolsLoader(api),
+                children: [
+                  
+                  {
+                    path: ":poolId",
+                    element: <UserPool />,
+                    loader: userPoolLoader(api),
+                  }
+                ]
+          }
+        ],
       }
     ]
 

@@ -1,46 +1,34 @@
-import { Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import {  Skeleton, Typography } from "@mui/material";
+import { Suspense, useContext, useEffect, useState } from "react";
+import { Await, defer, useFetcher, useLoaderData } from "react-router-dom";
 import { ApiContext } from "../App";
+
 import DownloadCSVButton from "./DownloadCSVButton";
 import UserPoolTable from "./UserPoolTable";
+import UserPoolView from "./UserPoolView";
+
+export function userPoolLoader(api){
+  return ({params})=> {
+    const dataPromise=api.getUserPoolById(params.poolId)
+    return defer({data: dataPromise} )
+  }
+}
+
 
 export default (props) =>{
 
-  const [data,setData] = useState({})
-  const [loading,setLoading] = useState(true)
-//  [failed,setFailed] = useState(false)
-  const api = useContext(ApiContext).api
-  useEffect(()=>{
-    setLoading(true)
-    api.getUserPoolById(props.poolId).then(result => {
-      setData(result)
-      console.log("got result ",result)
-      setLoading(false)
-    }, error=>console.log("error",error))
-  },[props.poolId])
-
+  const data = useLoaderData()
 
   return (
-    <div>
-      {loading ? 
-      (
-        <Skeleton>
-          <Typography variant="h6">Some Name</Typography>
-        </Skeleton>
-      )
-      :(
-        <div>
-        <Typography variant="h6">{data.name}</Typography>
-        <DownloadCSVButton 
-          headers={()=>['External Id','Url']}
-          data={()=>Object.values(data.users).map((item,index)=>[item.extId,encodeURI(window.location.origin+'/login/'+item.credential)])}
-          filename={data.name+'.csv'}>
-            Download as CSV
-          </DownloadCSVButton>
-          <UserPoolTable users={data.users} />
-        </div>
-      )
-      }
-    </div>
+    <Suspense fallback= {<Skeleton>
+          <UserPoolView name={"TestName"} users={[{extId: "extId1",credential: "credentials"},{extId: "extId2",credential: "credentials"}]} />
+        </Skeleton> } >
+        <Await resolve={data.data}
+        errorElement=<p>Error Loading Data </p> >
+          {(data)=>(
+            <UserPoolView name={data.name} users={data.users} />
+            )}
+        </Await>
+      </Suspense>    
 )
 }
