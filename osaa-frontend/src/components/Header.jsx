@@ -12,6 +12,7 @@ export default () => (
   </AppBar>
   <nav>
       <NavLink key="userpools" to="user-pool">User Pools</NavLink>
+      <NavLink key="choicesets" to="choice-set">Choice Sets</NavLink>
   </nav>
 </>
 )

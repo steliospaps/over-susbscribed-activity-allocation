@@ -13,6 +13,24 @@ export default class DummyClient {
         userCount: 10,
       },
     }
+
+    this.choiceSets={
+      setId1: {
+        name: 'activities for year one',
+        description: 'blurb one',
+        choices: {
+          choice1: {
+            name: 'activity one',
+            description: 'activity One blurb',
+          },
+          choice2: {
+            name: 'activity two',
+            description: 'activity Two blurb',
+          },
+        }
+      }
+    }
+    
   }
 
   getUserPools() {
@@ -21,6 +39,26 @@ export default class DummyClient {
       poolId: k,
     }))
 
+    return this.private_delay(result)
+  }
+
+  getChoiceSets() {
+    const result = Object.keys(this.choiceSets).map((k) => ({
+      name: this.choiceSets[k].name,
+      setId: k,
+    }))
+
+    return this.private_delay(result)
+  }
+
+  getChoiceSetById(id) {
+    console.log("getChoiceSetById id=",id)
+
+    const item = this.choiceSets[id]
+
+    const result = item
+
+    console.log(`returning `, JSON.stringify(result))
     return this.private_delay(result)
   }
 

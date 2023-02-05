@@ -21,6 +21,9 @@ import UserPool, { userPoolLoader } from './components/UserPool';
 import DummyClient from './client/DummyClient';
 import UserPools, { userPoolsLoader } from './components/UserPools';
 
+import ChoiceSets,{choiceSetsLoader} from './components/ChoiceSets';
+import ChoiceSet,{choiceSetLoader} from './components/ChoiceSet';
+
 const api=new DummyClient;
 
 const router = createBrowserRouter([
@@ -42,8 +45,21 @@ const router = createBrowserRouter([
                     path: ":poolId",
                     element: <UserPool />,
                     loader: userPoolLoader(api),
+                  },
+                ],
+
+                path: "choice-set",
+                element: <ChoiceSets/>,
+                loader: choiceSetsLoader(api),
+                children: [                  
+
+                  {
+                    path: ":setId",
+                    element: <ChoiceSet />,
+                    loader: choiceSetLoader(api),
                   }
-                ]
+                ],
+                
           }
         ],
       }
